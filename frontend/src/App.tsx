@@ -392,10 +392,7 @@ function AppLayout() {
                             View on GitHub
                         </a>
                     </p>
-                    <p>
-                        Built with AI assistance • MIT License • No data is
-                        stored
-                    </p>
+                    <p>MIT License</p>
                 </div>
             </footer>
 

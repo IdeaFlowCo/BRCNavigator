@@ -108,28 +108,6 @@ const HowItWorksModal: React.FC<HowItWorksModalProps> = ({
                     </ul>
                 </div>
 
-                {/* Data Privacy Section */}
-                <div className="data-privacy-section">
-                    <h3>Data Privacy</h3>
-                    <ul className="list-disc list-inside text-gray-600 space-y-1">
-                        <li>
-                            Your sheet data is processed directly in your
-                            browser when possible.
-                        </li>
-                        <li>
-                            For complex queries or very large sheets, data may
-                            be processed securely on our servers and is not
-                            stored after processing.
-                        </li>
-                        <li>BRC Navigator works with data in any language</li>
-                        <li>We never store your Google Sheets credentials.</li>
-                        <li>
-                            Uploaded files are deleted immediately after
-                            processing.
-                        </li>
-                    </ul>
-                </div>
-
                 {/* Modal Footer */}
                 <div className="modal-footer">
                     <button onClick={onClose} className="modal-got-it-button">
