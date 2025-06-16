@@ -25,7 +25,10 @@ function AppLayout() {
     } = useData();
     const [activeTab, setActiveTab] = useState<"url" | "upload">("url");
     const [query, setQuery] = useState<string>("");
-    const [aboutMe, setAboutMe] = useState<string>(""); // Add state for About Me
+    const [aboutMe, setAboutMe] = useState<string>(() => {
+        // Initialize from localStorage
+        return localStorage.getItem("brcNavigatorAboutMe") || "";
+    }); // Add state for About Me
     const [sheetUrl, setSheetUrl] = useState<string>(
         "https://docs.google.com/spreadsheets/d/1QQBVamDD0fi6DZiHLR1dDCkUq36KNM3k/edit?gid=894876008#gid=894876008"
     );
@@ -138,6 +141,8 @@ function AppLayout() {
     const handleAboutMeChange = (value: string) => {
         // Add handler for About Me
         setAboutMe(value);
+        // Save to localStorage
+        localStorage.setItem("brcNavigatorAboutMe", value);
     };
 
     const handleSheetUrlChange = (value: string) => {
