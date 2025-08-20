@@ -20,11 +20,11 @@ const resources: ResourceItem[] = [
         description: "Essential items to bring to the playa",
         links: [
             {
-                text: "Main List",
+                text: "List 1",
                 url: "https://docs.google.com/document/d/1KL__X9aNPQom54wifFTBCNhzwG4v_ZxmFBerSuXc_Uw/edit?tab=t.0#heading=h.edwibwrpdox1"
             },
             {
-                text: "Additional Items",
+                text: "List 2",
                 url: "https://docs.google.com/spreadsheets/d/1t2KvCRFsTvoLiFeo9ewsCgPUFzfgo0Re3AgDq05AdlU/edit?usp=sharing"
             }
         ],
