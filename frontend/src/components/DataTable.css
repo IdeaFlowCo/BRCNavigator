@@ -227,8 +227,13 @@
     align-items: center; /* Center icon vertically */
     flex-grow: 0; /* Prevent growing */
     padding: 0; /* Remove padding */
-    height: auto; /* Adjust height */
-    display: inline-flex; /* Use inline-flex to respect parent text-align */
+    height: auto; /* Auto height */
+    display: inline-flex; /* Use inline-flex */
+}
+
+/* Hide the sort icon span in sticky column since hearts don't sort */
+.table-header .sticky-col .sort-icon {
+    display: none;
 }
 
 /* Ensure sticky body cells have correct background (respecting alternating rows) */
@@ -249,17 +254,17 @@ td.sticky-col {
     /* justify-content: center; */ /* REMOVED */
     text-align: center; /* Use text-align */
     vertical-align: middle; /* Use vertical-align */
-    padding: 10px 12px; /* Ensure padding is consistent */
+    padding: 10px 12px; /* Restore padding */
 }
 
 /* Favorite Icon Styling */
 .favorite-icon-wrapper {
     /* display: inline-block; */ /* Use inline-block instead of flex */
-    display: inline-flex; /* Use inline-flex */
+    display: inline-flex; /* Use inline-flex to not break table layout */
     align-items: center; /* Center vertically */
     justify-content: center; /* Center horizontally */
     /* vertical-align: middle; */ /* Removed, handled by flex */
-    padding: 6px; /* Slightly larger padding for bigger icon */
+    padding: 6px; /* Keep smaller padding for icon */
     /* border-radius: 50%; */ /* REMOVED circular background */
     cursor: pointer;
     /* transition: background-color 0.2s ease-in-out; */ /* REMOVED background transition */
