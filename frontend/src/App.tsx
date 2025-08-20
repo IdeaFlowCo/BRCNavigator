@@ -1,9 +1,6 @@
-// import logoSrc from '/src/assets/logo.png'; // Remove unused import
-// import logoSrc from '/src/assets/logo.png'; // Remove unused import
 import "./App.css";
 import { useState, useEffect } from "react"; // Import useEffect
 import Papa, { ParseResult } from "papaparse";
-import * as XLSX from "xlsx";
 import { DataProvider, useData } from "@/context/DataContext";
 import QuerySection from "@/components/QuerySection";
 import DataTable from "@/components/DataTable";
@@ -15,10 +12,9 @@ import { HelpCircle, Heart } from "lucide-react"; // Import the HelpCircle & Hea
 function AppLayout() {
     const {
         headers,
-        // isDisplayingFullData, // Removed
-        viewMode, // Added
-        lastNonFavoriteViewMode, // Added
-        setViewMode, // Added
+        viewMode,
+        lastNonFavoriteViewMode,
+        setViewMode,
         setData,
         runSearchQuery,
         loading: isSearching,
@@ -30,7 +26,7 @@ function AppLayout() {
         return localStorage.getItem("brcNavigatorAboutMe") || "";
     }); // Add state for About Me
     const [sheetUrl, setSheetUrl] = useState<string>(
-        "https://docs.google.com/spreadsheets/d/1QQBVamDD0fi6DZiHLR1dDCkUq36KNM3k/edit?gid=894876008#gid=894876008"
+        "https://docs.google.com/spreadsheets/d/1Tzdfebm596C3TpsA9bPO0DLs8PcAQHD5/edit?usp=sharing&ouid=103820390436928978344&rtpof=true&sd=true"
     );
     const [file, setFile] = useState<File | null>(null);
     const [fileName, setFileName] = useState<string | null>(null);
@@ -56,7 +52,7 @@ function AppLayout() {
             }
 
             if (!parsedData || parsedData.length < 1) {
-                console.warn("Sheet appears to be empty or inaccessible."); // Use console.warn instead of alert for background fetch
+                console.warn("Sheet appears to be empty or inaccessible.");
                 return null;
             }
             const headers = parsedData[0];
@@ -125,7 +121,6 @@ function AppLayout() {
     // --- Effect Hook for Pre-caching ---
     useEffect(() => {
         // Fetch data from the default URL when the component mounts
-        console.log("Attempting to precache default sheet:", sheetUrl);
         fetchAndSetDataFromUrl(sheetUrl, true); // Pass true for isPrecache
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []); // Empty dependency array ensures this runs only once on mount
@@ -186,6 +181,8 @@ function AppLayout() {
                     const text = await file.text();
                     parsedResult = parseData(text);
                 } else if (ext === "xls" || ext === "xlsx") {
+                    // Dynamically import XLSX only when needed
+                    const XLSX = await import("xlsx");
                     const fileData = await file.arrayBuffer();
                     const workbook = XLSX.read(new Uint8Array(fileData), {
                         type: "array",

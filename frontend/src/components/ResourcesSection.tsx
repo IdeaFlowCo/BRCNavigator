@@ -10,7 +10,7 @@ interface ResourceItem {
 
 const resources: ResourceItem[] = [
     {
-        title: "Burning Man Example Packing List",
+        title: "Burning Man Packing List",
         description: "Essential items to bring to the playa",
         url: "https://docs.google.com/document/d/1KL__X9aNPQom54wifFTBCNhzwG4v_ZxmFBerSuXc_Uw/edit?tab=t.0#heading=h.edwibwrpdox1",
         Icon: Backpack,
@@ -38,6 +38,12 @@ const resources: ResourceItem[] = [
         description: "Community-sourced solutions for common playa problems",
         url: "https://docs.google.com/document/d/1J2s35Fd2cpXPvs8VWIq6LFLMNVurCyXRk94uaCLbvoA/edit?tab=t.0#heading=h.fmrpavgg0t70",
         Icon: Wrench,
+    },
+    {
+        title: "Additional Packing List",
+        description: "Supplementary packing list with additional essentials",
+        url: "https://docs.google.com/spreadsheets/d/1t2KvCRFsTvoLiFeo9ewsCgPUFzfgo0Re3AgDq05AdlU/edit?usp=sharing",
+        Icon: Backpack,
     },
 ];
 

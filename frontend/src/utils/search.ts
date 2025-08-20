@@ -121,7 +121,6 @@ export const runSearch = async (
         return filteredRows;
     } catch (error) {
         console.error("Error during parallel chunk processing:", error);
-        // Fallback or specific error handling needed here
         return []; // Return empty results on top-level error
     }
 };
