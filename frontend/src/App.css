@@ -704,6 +704,28 @@ body {
     line-height: 1.4;
 }
 
+/* Styles for multiple links within a resource card */
+.resource-links {
+    margin-top: 0.5rem;
+    font-size: 0.875rem;
+}
+
+.resource-link {
+    color: #cc5500; /* Theme orange */
+    text-decoration: none;
+    transition: color 0.2s ease-in-out;
+}
+
+.resource-link:hover {
+    color: #b34700; /* Darker orange on hover */
+    text-decoration: underline;
+}
+
+.link-separator {
+    color: #999999;
+    margin: 0 0.25rem;
+}
+
 /* Add styles for the custom favorites toggle button */
 .favorites-toggle-button {
     position: absolute;
