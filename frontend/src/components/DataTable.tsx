@@ -134,7 +134,7 @@ const DataTable: React.FC = () => {
         }));
         // Filter out the UID column if it exists and we don't want to display it
         // .filter((_, index) => index !== uidColumnIndex); // Optional: Hide UID column
-    }, [headers, uidColumnIndex]); // Add uidColumnIndex dependency
+    }, [headers]); // uidColumnIndex is derived from headers, so not needed as dependency
 
     // Combine actions column and data columns
     const columns = useMemo<ColumnDef<string[]>[]>(

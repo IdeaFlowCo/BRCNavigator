@@ -1,9 +1,19 @@
 // __mocks__/openaiClient.ts
 import { jest } from "@jest/globals";
 
-// Revert to simpler mock using 'any'
-const mockCreate = jest.fn().mockImplementation(async (params: any) => {
-    const userMessage = params.messages.find((m: any) => m.role === "user");
+// Mock implementation with proper types
+interface MockMessage {
+    role: string;
+    content: string;
+}
+
+interface MockParams {
+    messages: MockMessage[];
+}
+
+const mockCreate = jest.fn().mockImplementation(async (params: unknown) => {
+    const typedParams = params as MockParams;
+    const userMessage = typedParams.messages.find((m) => m.role === "user");
     const content = userMessage?.content || "";
 
     if (content.includes("Query: find me events related to 'yoga'")) {

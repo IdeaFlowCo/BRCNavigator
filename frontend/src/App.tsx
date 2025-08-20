@@ -6,6 +6,7 @@ import QuerySection from "@/components/QuerySection";
 import DataTable from "@/components/DataTable";
 import HowItWorksModal from "@/components/HowItWorksModal"; // Import the modal component
 import ResourcesSection from "@/components/ResourcesSection"; // Import the new component
+import ErrorBoundary from "@/components/ErrorBoundary";
 import { HelpCircle, Heart } from "lucide-react"; // Import the HelpCircle & Heart icons
 
 // Define the main layout and logic component
@@ -181,18 +182,23 @@ function AppLayout() {
                     const text = await file.text();
                     parsedResult = parseData(text);
                 } else if (ext === "xls" || ext === "xlsx") {
-                    // Dynamically import XLSX only when needed
-                    const XLSX = await import("xlsx");
+                    // Dynamically import ExcelJS only when needed
+                    const ExcelJS = await import("exceljs");
                     const fileData = await file.arrayBuffer();
-                    const workbook = XLSX.read(new Uint8Array(fileData), {
-                        type: "array",
+                    const workbook = new ExcelJS.Workbook();
+                    await workbook.xlsx.load(fileData);
+                    const worksheet = workbook.worksheets[0];
+                    
+                    // Convert worksheet to 2D array (similar to xlsx's sheet_to_json with header: 1)
+                    const json: string[][] = [];
+                    worksheet.eachRow((row) => {
+                        const rowData: string[] = [];
+                        row.eachCell((cell, colNumber) => {
+                            rowData[colNumber - 1] = cell.value?.toString() || "";
+                        });
+                        json.push(rowData);
                     });
-                    const sheetName = workbook.SheetNames[0];
-                    const worksheet = workbook.Sheets[sheetName];
-                    const json = XLSX.utils.sheet_to_json<string[]>(worksheet, {
-                        header: 1,
-                        raw: false,
-                    });
+                    
                     parsedResult = parseData(json);
                 } else {
                     alert("Unsupported file type.");
@@ -302,22 +308,24 @@ function AppLayout() {
                     </p>
                 </div>
 
-                <QuerySection
-                    query={query}
-                    sheetUrl={sheetUrl}
-                    file={file}
-                    fileName={fileName}
-                    isLoading={isSearching}
-                    isLoadingSpreadsheet={isLoadingSpreadsheet}
-                    activeTab={activeTab}
-                    aboutMe={aboutMe}
-                    onQueryChange={handleQueryChange}
-                    onSheetUrlChange={handleSheetUrlChange}
-                    onFileChange={handleFileChange}
-                    onTabChange={handleTabChange}
-                    onAboutMeChange={handleAboutMeChange}
-                    onSubmit={handleSubmit}
-                />
+                <ErrorBoundary>
+                    <QuerySection
+                        query={query}
+                        sheetUrl={sheetUrl}
+                        file={file}
+                        fileName={fileName}
+                        isLoading={isSearching}
+                        isLoadingSpreadsheet={isLoadingSpreadsheet}
+                        activeTab={activeTab}
+                        aboutMe={aboutMe}
+                        onQueryChange={handleQueryChange}
+                        onSheetUrlChange={handleSheetUrlChange}
+                        onFileChange={handleFileChange}
+                        onTabChange={handleTabChange}
+                        onAboutMeChange={handleAboutMeChange}
+                        onSubmit={handleSubmit}
+                    />
+                </ErrorBoundary>
 
                 {/* Conditional Rendering for Table Area with Button Repositioned */}
                 {headers.length > 0 && (
@@ -338,7 +346,9 @@ function AppLayout() {
                                 : "All Events"}
                         </h2>
                         {/* DataTable */}
-                        <DataTable /> {/* Moved DataTable inside */}
+                        <ErrorBoundary>
+                            <DataTable /> {/* Moved DataTable inside */}
+                        </ErrorBoundary>
                         {/* Favorites Button (Standard HTML with custom CSS class) */}
                         <button
                             type="button"
