@@ -153,22 +153,19 @@
         align-items: center;
     }
 
-    /* Ensure header is sticky on mobile */
+    /* Override any conflicting sticky styles */
     .table-header {
-        position: -webkit-sticky; /* Safari/iOS support */
-        position: sticky;
-        top: 0;
-        background: #f8f9fa; /* Header background */
-        z-index: 100; /* Higher z-index to ensure it stays on top */
-        border-bottom: 2px solid #dee2e6; /* Header bottom border */
-        /* Ensure the header stays visible */
-        will-change: transform;
+        position: sticky !important;
+        top: 0 !important;
+        background: #f8f9fa !important;
+        z-index: 1000 !important;
+        border-bottom: 2px solid #dee2e6 !important;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1) !important;
     }
 
-    /* Ensure sticky column background matches header */
     .table-header .sticky-col {
-        background-color: #f8f9fa; /* Match header background */
-        z-index: 101; /* Above header */
+        background-color: #f8f9fa !important;
+        z-index: 1001 !important;
     }
 }
 
@@ -190,16 +187,7 @@
     border-collapse: collapse;
 }
 
-.table-header {
-    position: -webkit-sticky; /* Safari/iOS support */
-    position: sticky;
-    top: 0;
-    background: #f8f9fa; /* Header background */
-    z-index: 100; /* Higher z-index to ensure it stays on top */
-    border-bottom: 2px solid #dee2e6; /* Header bottom border */
-    /* Ensure the header stays visible */
-    will-change: transform;
-}
+/* Table header - sticky positioning handled by media queries */
 
 .table-header-cell {
     /* width is set inline */

@@ -1,7 +1,7 @@
 // Auto-generated version info
 export const VERSION_INFO = {
     buildTime: new Date().toISOString(),
-    mobileFix: 'v11',
+    mobileFix: 'v12',
     breakpoint: 768,
     description: 'Critical sticky header fix for virtualized table',
     lastCommit: 'c5e0e77', // Update this with each significant change
