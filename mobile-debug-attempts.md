@@ -74,16 +74,32 @@
 }
 ```
 
-## Attempts in Progress
+## ROOT CAUSE IDENTIFIED! 
 
-### Attempt 3: Remove Width Constraints (TESTING)
+### The Real Problem (Found by root-cause-analyzer)
+**NOT a CSS issue!** The table's JavaScript `calculateInitialSize()` function was calculating column widths based on header text length without considering viewport width. This caused the table to exceed mobile viewport width regardless of CSS constraints.
+
+**Why CSS fixes failed:** The table uses `table-layout: fixed` with inline styles set via JavaScript (`style={{ width: header.getSize() }}`). These inline styles override any CSS rules.
+
+**Why it worked in desktop responsive mode:** Desktop browsers handle overflow differently and have more computational resources. Mobile browsers strictly enforce viewport boundaries.
+
+### Attempt 3: Remove Width Constraints (FAILED)
 **Changes:**
 - Added aggressive media query for mobile (max-width: 768px)
 - Forces all major containers to width: 100% !important
 - Removes max-width constraints from header, main, footer
 - Reduces padding on mobile to 0.5rem
 
-**Commit:** Not committed yet - testing first
+**Result:** Failed because it was trying to fix a JavaScript problem with CSS
+
+### Attempt 4: Fix Column Width Calculation (TESTING)
+**Changes:**
+- Modified `calculateInitialSize()` in DataTable.tsx to be viewport-aware
+- Reduced base sizes, character widths, and padding for mobile
+- Limited max column width to 200px on mobile (vs 500px on desktop)
+- Made Description column 2x wide on mobile (vs 3x on desktop)
+
+**Commit:** Testing now
 
 ## Next Steps
 1. Try each solution incrementally

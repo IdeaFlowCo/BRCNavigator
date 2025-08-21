@@ -37,24 +37,31 @@ const DataTable: React.FC = () => {
 
     // Function to estimate initial size based on header length
     const calculateInitialSize = (headerText: string): number => {
-        const baseSize = 120; // Base width for shorter headers
-        const charWidth = 8; // Estimated pixels per character
-        const padding = 40; // Padding for sort icon, resizer, etc.
+        // Get viewport width to make calculations responsive
+        const viewportWidth = typeof window !== 'undefined' ? window.innerWidth : 1024;
+        const isMobile = viewportWidth < 768;
+        
+        // Adjust base sizes for mobile
+        const baseSize = isMobile ? 80 : 120; // Smaller base on mobile
+        const charWidth = isMobile ? 6 : 8; // Smaller character width on mobile
+        const padding = isMobile ? 20 : 40; // Less padding on mobile
+        
         const estimatedWidth = headerText.length * charWidth + padding;
         // Use a larger base size if the estimated width is significant
         const dynamicBase = Math.max(baseSize, estimatedWidth * 0.6); // Bias towards wider if header is long
         let calculatedSize = Math.max(
-            50,
+            isMobile ? 40 : 50, // Smaller minimum on mobile
             Math.max(dynamicBase, estimatedWidth * 0.8)
         );
 
         // Special case for 'Description' column
         if (headerText === "Description") {
-            calculatedSize *= 3; // Make it triple wide
+            calculatedSize *= isMobile ? 2 : 3; // Less expansion on mobile
         }
 
-        // Clamp between min/max
-        return Math.min(500, calculatedSize);
+        // Clamp between min/max - smaller max on mobile
+        const maxWidth = isMobile ? 200 : 500;
+        return Math.min(maxWidth, calculatedSize);
     };
 
     // Define the Actions column separately
