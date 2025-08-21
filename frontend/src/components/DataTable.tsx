@@ -214,70 +214,127 @@ const DataTable: React.FC = () => {
 
     return (
         <div ref={tableContainerRef} className="table-container">
+            {/* Sticky header for mobile - positioned outside virtualized area */}
+            {isMobileDevice() && (
+                <div className="sticky-header-wrapper">
+                    <table className="data-table sticky-header-table">
+                        <thead className="table-header sticky-header">
+                            {table.getHeaderGroups().map((headerGroup) => (
+                                <tr key={headerGroup.id}>
+                                    {headerGroup.headers.map((header) => (
+                                        <th
+                                            key={header.id}
+                                            style={{ width: header.getSize() }}
+                                            className={`table-header-cell ${
+                                                header.id === "actions"
+                                                    ? "sticky-col"
+                                                    : ""
+                                            }`}
+                                            colSpan={header.colSpan}
+                                        >
+                                            <div
+                                                className={`header-content ${
+                                                    header.column.getCanSort()
+                                                        ? "cursor-pointer select-none"
+                                                        : ""
+                                                }`}
+                                                onClick={
+                                                    header.column.getCanSort()
+                                                        ? header.column.getToggleSortingHandler()
+                                                        : undefined
+                                                }
+                                            >
+                                                {flexRender(
+                                                    header.column.columnDef.header,
+                                                    header.getContext()
+                                                )}
+                                                <span className="sort-icon">
+                                                    {{
+                                                        asc: <ArrowUp size={16} />,
+                                                        desc: <ArrowDown size={16} />,
+                                                    }[
+                                                        header.column.getIsSorted() as string
+                                                    ] ??
+                                                        (header.column.getCanSort() ? (
+                                                            <ChevronsUpDown size={16} />
+                                                        ) : null)}
+                                                </span>
+                                            </div>
+                                        </th>
+                                    ))}
+                                </tr>
+                            ))}
+                        </thead>
+                    </table>
+                </div>
+            )}
+
+            {/* Main table with virtualization */}
             <table className="data-table">
-                <thead className="table-header">
-                    {table.getHeaderGroups().map((headerGroup) => (
-                        <tr key={headerGroup.id}>
-                            {headerGroup.headers.map((header) => (
-                                <th
-                                    key={header.id}
-                                    style={{ width: header.getSize() }}
-                                    // Add sticky class for the actions column header
-                                    className={`table-header-cell ${
-                                        header.id === "actions"
-                                            ? "sticky-col"
-                                            : ""
-                                    }`}
-                                    colSpan={header.colSpan}
-                                >
-                                    <div
-                                        className={`header-content ${
-                                            header.column.getCanSort()
-                                                ? "cursor-pointer select-none"
-                                                : ""
-                                        }`} // Add cursor only if sortable
-                                        onClick={
-                                            header.column.getCanSort()
-                                                ? header.column.getToggleSortingHandler()
-                                                : undefined
-                                        } // Only add onClick if sortable
-                                    >
-                                        {flexRender(
-                                            header.column.columnDef.header,
-                                            header.getContext()
-                                        )}
-                                        <span className="sort-icon">
-                                            {{
-                                                asc: <ArrowUp size={16} />,
-                                                desc: <ArrowDown size={16} />,
-                                            }[
-                                                header.column.getIsSorted() as string
-                                            ] ??
-                                                (header.column.getCanSort() ? (
-                                                    <ChevronsUpDown size={16} />
-                                                ) : null)}
-                                        </span>
-                                    </div>
-                                    {/* Resize Handle */}
-                                    <div
-                                        onMouseDown={header.getResizeHandler()}
-                                        onTouchStart={header.getResizeHandler()}
-                                        className={`resizer ${
-                                            header.column.getIsResizing()
-                                                ? "isResizing"
+                {/* Desktop header - only show on desktop */}
+                {!isMobileDevice() && (
+                    <thead className="table-header">
+                        {table.getHeaderGroups().map((headerGroup) => (
+                            <tr key={headerGroup.id}>
+                                {headerGroup.headers.map((header) => (
+                                    <th
+                                        key={header.id}
+                                        style={{ width: header.getSize() }}
+                                        className={`table-header-cell ${
+                                            header.id === "actions"
+                                                ? "sticky-col"
                                                 : ""
                                         }`}
+                                        colSpan={header.colSpan}
                                     >
-                                        {/* Only show resizer if resizing is enabled */}
-                                        {header.column.getCanResize() && (
-                                            <GripVertical size={18} />
-                                        )}
-                                    </div>
-                                </th>
-                            ))}
-                        </tr>
-                    ))}
-                </thead>
+                                        <div
+                                            className={`header-content ${
+                                                header.column.getCanSort()
+                                                    ? "cursor-pointer select-none"
+                                                    : ""
+                                            }`}
+                                            onClick={
+                                                header.column.getCanSort()
+                                                    ? header.column.getToggleSortingHandler()
+                                                    : undefined
+                                            }
+                                        >
+                                            {flexRender(
+                                                header.column.columnDef.header,
+                                                header.getContext()
+                                            )}
+                                            <span className="sort-icon">
+                                                {{
+                                                    asc: <ArrowUp size={16} />,
+                                                    desc: <ArrowDown size={16} />,
+                                                }[
+                                                    header.column.getIsSorted() as string
+                                                ] ??
+                                                    (header.column.getCanSort() ? (
+                                                        <ChevronsUpDown size={16} />
+                                                    ) : null)}
+                                            </span>
+                                        </div>
+                                        <div
+                                            onMouseDown={header.getResizeHandler()}
+                                            onTouchStart={header.getResizeHandler()}
+                                            className={`resizer ${
+                                                header.column.getIsResizing()
+                                                    ? "isResizing"
+                                                    : ""
+                                            }`}
+                                        >
+                                            {header.column.getCanResize() && (
+                                                <GripVertical size={18} />
+                                            )}
+                                        </div>
+                                    </th>
+                                ))}
+                            </tr>
+                        ))}
+                    </thead>
+                )}
+
                 <tbody
                     className="table-body"
                     style={{ height: `${rowVirtualizer.getTotalSize()}px` }}
@@ -301,7 +358,6 @@ const DataTable: React.FC = () => {
                                     <td
                                         key={cell.id}
                                         style={{ width: cell.column.getSize() }}
-                                        // Add sticky class for the actions column cell
                                         className={`table-cell ${
                                             cell.column.id === "actions"
                                                 ? "sticky-col"

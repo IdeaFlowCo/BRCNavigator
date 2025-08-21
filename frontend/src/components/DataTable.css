@@ -153,19 +153,47 @@
         align-items: center;
     }
 
-    /* Override any conflicting sticky styles */
-    .table-header {
-        position: sticky !important;
-        top: 0 !important;
-        background: #f8f9fa !important;
-        z-index: 1000 !important;
-        border-bottom: 2px solid #dee2e6 !important;
-        box-shadow: 0 2px 4px rgba(0,0,0,0.1) !important;
+    /* Mobile sticky header wrapper - positioned outside virtualized area */
+    .sticky-header-wrapper {
+        position: sticky;
+        top: 0;
+        z-index: 2000;
+        background: white;
+        border-bottom: 2px solid #dee2e6;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        margin-bottom: -1px; /* Prevent gap between header and body */
     }
 
-    .table-header .sticky-col {
-        background-color: #f8f9fa !important;
-        z-index: 1001 !important;
+    .sticky-header-table {
+        margin: 0;
+        border: none;
+    }
+
+    .sticky-header {
+        background: #f8f9fa;
+        border-bottom: none;
+    }
+
+    /* Ensure sticky header cells have proper background */
+    .sticky-header .table-header-cell {
+        background: #f8f9fa !important;
+        border-bottom: none;
+    }
+
+    .sticky-header .sticky-col {
+        background: #f8f9fa !important;
+        position: sticky;
+        left: 0;
+        z-index: 2001;
+    }
+
+    /* Remove the old sticky styles that conflict with virtualization */
+    .table-header {
+        position: static;
+        top: auto;
+        background: inherit;
+        z-index: auto;
+        border-bottom: 1px solid #dee2e6;
     }
 }
 
