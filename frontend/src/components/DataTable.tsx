@@ -39,7 +39,7 @@ const DataTable: React.FC = () => {
     const calculateInitialSize = (headerText: string, totalColumns: number = 10): number => {
         // Get viewport width to make calculations responsive
         const viewportWidth = typeof window !== 'undefined' ? window.innerWidth : 1024;
-        const isMobile = viewportWidth < 768;
+        const isMobile = viewportWidth <= 480; // Match CSS breakpoint!
         
         if (isMobile) {
             // On mobile, distribute viewport width among columns
@@ -77,7 +77,7 @@ const DataTable: React.FC = () => {
     const actionsColumn: ColumnDef<string[]> = useMemo(
         () => {
             const viewportWidth = typeof window !== 'undefined' ? window.innerWidth : 1024;
-            const isMobile = viewportWidth < 768;
+            const isMobile = viewportWidth <= 480; // Match CSS breakpoint!
             const columnSize = isMobile ? 40 : 60;
             
             return {
@@ -145,7 +145,7 @@ const DataTable: React.FC = () => {
 
     const dataColumns = useMemo<ColumnDef<string[]>[]>(() => {
         const viewportWidth = typeof window !== 'undefined' ? window.innerWidth : 1024;
-        const isMobile = viewportWidth < 768;
+        const isMobile = viewportWidth <= 480; // Match CSS breakpoint!
         
         return headers.map((header, index) => ({
             id: String(index), // Keep original index as ID for data columns
