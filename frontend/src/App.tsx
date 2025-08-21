@@ -324,6 +324,15 @@ function AppLayout() {
                         gatherings across the playa that match your interests
                         and expand your consciousness.
                     </p>
+                    {/* Version debug info for mobile */}
+                    <div style={{ 
+                        fontSize: '11px', 
+                        color: '#999', 
+                        marginTop: '8px',
+                        fontFamily: 'monospace'
+                    }}>
+                        v{VERSION_INFO.mobileFix} • {VERSION_INFO.lastCommit} • {typeof window !== 'undefined' ? `${window.innerWidth}×${window.innerHeight}` : 'loading...'}
+                    </div>
                 </div>
 
                 <ErrorBoundary>
