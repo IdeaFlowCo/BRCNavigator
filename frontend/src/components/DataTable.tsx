@@ -1,4 +1,4 @@
-import React, { useMemo, useRef, useState } from "react";
+import React, { useMemo, useRef, useState, useCallback } from "react";
 import {
     useReactTable,
     getCoreRowModel,
@@ -35,23 +35,39 @@ const DataTable: React.FC = () => {
     const [sorting, setSorting] = useState<SortingState>([]);
     const [columnSizing, setColumnSizing] = useState<ColumnSizingState>({});
 
+    // Helper function to detect mobile devices more reliably
+    const isMobileDevice = (): boolean => {
+        if (typeof window === 'undefined') return false;
+
+        // Check viewport width - aligned with CSS breakpoint
+        const viewportWidth = window.innerWidth;
+        if (viewportWidth <= 768) return true;
+
+        // Check user agent as fallback for mobile browsers that might not report correct viewport
+        const userAgent = navigator.userAgent.toLowerCase();
+        const mobileKeywords = ['mobile', 'android', 'iphone', 'ipad', 'ipod', 'blackberry', 'windows phone'];
+        const isMobileUA = mobileKeywords.some(keyword => userAgent.includes(keyword));
+
+        return isMobileUA && viewportWidth <= 1024;
+    };
+
     // Function to estimate initial size based on header length
-    const calculateInitialSize = (headerText: string, totalColumns: number = 10): number => {
+    const calculateInitialSize = useCallback((headerText: string, totalColumns: number = 10): number => {
         // Get viewport width to make calculations responsive
         const viewportWidth = typeof window !== 'undefined' ? window.innerWidth : 1024;
-        const isMobile = viewportWidth <= 480; // Match CSS breakpoint!
-        
+        const isMobile = isMobileDevice(); // Use more reliable detection
+
         if (isMobile) {
             // On mobile, distribute viewport width among columns
             const actionsColumnWidth = 40; // Fixed width for actions column
             const availableWidth = viewportWidth - actionsColumnWidth - 20; // Minus actions and some padding
             const baseColumnWidth = Math.floor(availableWidth / totalColumns);
-            
+
             // Give Description column more space, but not too much
             if (headerText === "Description") {
                 return Math.min(baseColumnWidth * 2, 150);
             }
-            
+
             // For other columns, use base width with slight adjustments
             const minWidth = 40;
             const maxWidth = 100;
@@ -64,20 +80,19 @@ const DataTable: React.FC = () => {
             const estimatedWidth = headerText.length * charWidth + padding;
             const dynamicBase = Math.max(baseSize, estimatedWidth * 0.6);
             let calculatedSize = Math.max(50, Math.max(dynamicBase, estimatedWidth * 0.8));
-            
+
             if (headerText === "Description") {
                 calculatedSize *= 3;
             }
-            
+
             return Math.min(500, calculatedSize);
         }
-    };
+    }, []); // Empty dependency array since it only depends on window properties
 
     // Define the Actions column separately
     const actionsColumn: ColumnDef<string[]> = useMemo(
         () => {
-            const viewportWidth = typeof window !== 'undefined' ? window.innerWidth : 1024;
-            const isMobile = viewportWidth <= 480; // Match CSS breakpoint!
+            const isMobile = isMobileDevice(); // Use reliable mobile detection
             const columnSize = isMobile ? 40 : 60;
             
             return {
@@ -144,8 +159,7 @@ const DataTable: React.FC = () => {
     );
 
     const dataColumns = useMemo<ColumnDef<string[]>[]>(() => {
-        const viewportWidth = typeof window !== 'undefined' ? window.innerWidth : 1024;
-        const isMobile = viewportWidth <= 480; // Match CSS breakpoint!
+        const isMobile = isMobileDevice(); // Use reliable mobile detection
         
         return headers.map((header, index) => ({
             id: String(index), // Keep original index as ID for data columns
@@ -158,7 +172,7 @@ const DataTable: React.FC = () => {
         }));
         // Filter out the UID column if it exists and we don't want to display it
         // .filter((_, index) => index !== uidColumnIndex); // Optional: Hide UID column
-    }, [headers]); // uidColumnIndex is derived from headers, so not needed as dependency
+    }, [headers, calculateInitialSize]); // Include calculateInitialSize dependency
 
     // Combine actions column and data columns
     const columns = useMemo<ColumnDef<string[]>[]>(

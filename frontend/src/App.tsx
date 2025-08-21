@@ -8,9 +8,27 @@ import HowItWorksModal from "@/components/HowItWorksModal"; // Import the modal 
 import ResourcesSection from "@/components/ResourcesSection"; // Import the new component
 import ErrorBoundary from "@/components/ErrorBoundary";
 import { HelpCircle, Heart } from "lucide-react"; // Import the HelpCircle & Heart icons
+import { VERSION_INFO } from "@/version"; // Import version info
 
 // Define the main layout and logic component
 function AppLayout() {
+    // Log version info on mount for debugging
+    useEffect(() => {
+        console.log(`%c🔥 BRC Navigator Version Info`, 'color: #ff6600; font-size: 16px; font-weight: bold');
+        console.log(`Build: ${VERSION_INFO.buildTime}`);
+        console.log(`Mobile Fix: ${VERSION_INFO.mobileFix} - Breakpoint @ ${VERSION_INFO.breakpoint}px`);
+        console.log(`Description: ${VERSION_INFO.description}`);
+        console.log(`Last Commit: ${VERSION_INFO.lastCommit}`);
+        console.log('Features:', VERSION_INFO.features);
+        console.log('---');
+        
+        // Also log viewport info for debugging
+        if (typeof window !== 'undefined') {
+            console.log(`Current Viewport: ${window.innerWidth}x${window.innerHeight}`);
+            console.log(`User Agent: ${navigator.userAgent.substring(0, 50)}...`);
+        }
+    }, []);
+    
     const {
         headers,
         viewMode,

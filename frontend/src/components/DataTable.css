@@ -9,16 +9,43 @@
     box-sizing: border-box;
 }
 
-/* Mobile adjustments for table container */
-@media (max-width: 480px) {
+/* Mobile adjustments - only apply to smaller screens that are likely mobile */
+@media (max-width: 768px) {
     .table-container {
-        height: 50vh; /* Reduce height on mobile for better UX */
-        border-radius: 4px;
+        height: 50vh; /* Reduce height on smaller screens for better UX */
+        overflow-x: auto; /* Enable horizontal scrolling if needed */
+        -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
     }
-    
+
     .data-table {
-        table-layout: auto !important; /* Override fixed layout on mobile */
-        min-width: 100%; /* Ensure minimum width */
+        table-layout: auto; /* Allow content to determine column widths on small screens */
+        min-width: 100%;
+        font-size: 14px; /* Slightly larger font for readability */
+    }
+
+    .table-header-cell {
+        padding: 8px 8px; /* Slightly smaller padding on mobile */
+        font-size: 14px; /* Readable font size */
+        min-width: 80px; /* Minimum width for readability */
+    }
+
+    .table-cell {
+        padding: 8px 8px; /* Comfortable padding */
+        font-size: 14px; /* Readable font size */
+        min-width: 80px; /* Minimum width for readability */
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    /* Make the actions column appropriately sized */
+    .sticky-col {
+        width: 50px;
+        min-width: 50px;
+        max-width: 50px;
+    }
+
+    .favorite-icon-wrapper {
+        padding: 8px; /* Comfortable padding */
     }
 }
 
