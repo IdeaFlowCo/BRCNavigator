@@ -5,6 +5,16 @@
     border: 1px solid #dee2e6; /* Match other borders */
     border-radius: 6px; /* Add slight rounding */
     background-color: #ffffff; /* Ensure white background */
+    width: 100%;
+    box-sizing: border-box;
+}
+
+/* Mobile adjustments for table container */
+@media (max-width: 480px) {
+    .table-container {
+        height: 50vh; /* Reduce height on mobile for better UX */
+        border-radius: 4px;
+    }
 }
 
 .data-table {
