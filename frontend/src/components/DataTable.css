@@ -130,11 +130,14 @@
 }
 
 .table-header {
+    position: -webkit-sticky; /* Safari/iOS support */
     position: sticky;
     top: 0;
     background: #f8f9fa; /* Header background */
-    z-index: 1;
+    z-index: 100; /* Higher z-index to ensure it stays on top */
     border-bottom: 2px solid #dee2e6; /* Header bottom border */
+    /* Ensure the header stays visible */
+    will-change: transform;
 }
 
 .table-header-cell {
@@ -320,9 +323,10 @@
 
 /* Styles for the sticky Actions column */
 .sticky-col {
+    position: -webkit-sticky; /* Safari/iOS support */
     position: sticky;
     left: 0;
-    z-index: 2; /* Ensure it's above non-sticky cells (z-index 1 is header) */
+    z-index: 2; /* Ensure it's above non-sticky cells */
 }
 
 /* Ensure sticky header cell has correct background and uses text/vertical align */

@@ -1,16 +1,16 @@
 // Auto-generated version info
 export const VERSION_INFO = {
     buildTime: new Date().toISOString(),
-    mobileFix: 'v8',
+    mobileFix: 'v9',
     breakpoint: 768,
-    description: 'Force 1200px table width for guaranteed horizontal scrolling',
-    lastCommit: '1f690d7', // Update this with each significant change
+    description: 'Fixed sticky header with webkit prefix for iOS',
+    lastCommit: '1fbe70b', // Update this with each significant change
     features: [
+        'Sticky header with -webkit-sticky for iOS support',
+        'Higher z-index (100) for header to stay on top',
+        'will-change: transform for better performance',
         'Table forced to 1200px width on mobile',
-        'Custom scrollbar styling for better visibility',
-        'Explicit overflow-x and overflow-y auto',
-        'Position relative with z-index for scroll priority',
-        'Row width matches table width (1200px)',
-        'Horizontal scrolling guaranteed to work'
+        'Both vertical (sticky header) and horizontal scrolling work',
+        'Sticky actions column also has webkit prefix'
     ]
 };
