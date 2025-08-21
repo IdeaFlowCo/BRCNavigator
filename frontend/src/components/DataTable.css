@@ -15,6 +15,11 @@
         height: 50vh; /* Reduce height on mobile for better UX */
         border-radius: 4px;
     }
+    
+    .data-table {
+        table-layout: auto !important; /* Override fixed layout on mobile */
+        min-width: 100%; /* Ensure minimum width */
+    }
 }
 
 .data-table {
