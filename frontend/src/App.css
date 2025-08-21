@@ -149,6 +149,32 @@ body {
     .query-section-container {
         padding: 1rem; /* Reduce padding on small screens */
         margin-bottom: 1rem;
+        max-width: 100%; /* Ensure it doesn't exceed viewport */
+    }
+}
+
+/* Aggressive mobile fix - remove ALL width constraints */
+@media screen and (max-width: 768px) {
+    .header-content,
+    .main-content,
+    .footer-content {
+        max-width: 100% !important;
+        width: 100% !important;
+        padding-left: 0.5rem !important;
+        padding-right: 0.5rem !important;
+    }
+    
+    .intro-description {
+        max-width: 100% !important;
+    }
+    
+    /* Ensure all containers fit */
+    .query-section-container,
+    .input-section-wrapper,
+    .two-column-inputs,
+    .input-group {
+        max-width: 100% !important;
+        width: 100% !important;
     }
 }
 
