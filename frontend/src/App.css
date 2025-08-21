@@ -4,7 +4,7 @@
 }
 
 html {
-    overflow-x: hidden; /* Prevent horizontal scroll on mobile */
+    /* overflow-x: hidden; */ /* REMOVED: Prevent horizontal scroll on mobile - conflicts with table scrolling */
     width: 100%;
 }
 
@@ -14,7 +14,7 @@ body {
         Helvetica, Arial, sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    overflow-x: hidden; /* Prevent horizontal scroll */
+    /* overflow-x: hidden; */ /* REMOVED: Prevent horizontal scroll - conflicts with table scrolling */
     width: 100%;
     box-sizing: border-box;
     background-color: #fff8dc; /* Light sand/off-white background */
@@ -141,7 +141,7 @@ body {
     box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05); /* Keep subtle shadow */
     width: 100%;
     box-sizing: border-box;
-    overflow-x: hidden; /* Prevent horizontal overflow */
+    /* overflow-x: hidden; */ /* REMOVED: Prevent horizontal overflow - conflicts with table scrolling */
 }
 
 /* Mobile-specific adjustments */
