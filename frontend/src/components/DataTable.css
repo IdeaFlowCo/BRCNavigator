@@ -19,6 +19,12 @@
     border-radius: 6px;
     background-color: #ffffff;
     box-sizing: border-box;
+    /* Ensure scrolling works on all mobile browsers */
+    overflow-x: auto;
+    overflow-y: auto;
+    /* Prevent any parent containers from blocking scrolling */
+    position: relative;
+    z-index: 1;
 }
 
 /* Mobile-specific optimizations */
@@ -26,11 +32,47 @@
     .table-container {
         height: 50vh; /* Slightly less height on very small screens */
         -webkit-overflow-scrolling: touch; /* Ensure smooth scrolling on iOS */
+        /* Make sure scrolling indicators are visible */
+        scrollbar-width: thin;
+        scrollbar-color: rgba(0,0,0,0.3) transparent;
+    }
+
+    /* Webkit scrollbar styling for better mobile experience */
+    .table-container::-webkit-scrollbar {
+        width: 8px;
+        height: 8px;
+    }
+
+    .table-container::-webkit-scrollbar-track {
+        background: rgba(0,0,0,0.1);
+        border-radius: 4px;
+    }
+
+    .table-container::-webkit-scrollbar-thumb {
+        background: rgba(0,0,0,0.3);
+        border-radius: 4px;
+    }
+
+    .table-container::-webkit-scrollbar-thumb:hover {
+        background: rgba(0,0,0,0.5);
     }
 
     .data-table {
         font-size: 14px; /* Slightly larger font for mobile readability */
-        min-width: 800px; /* Ensure table is wide enough to be readable */
+        min-width: 1200px; /* Make table much wider to ensure horizontal scrolling works */
+        width: 1200px; /* Explicit width to force horizontal scrolling */
+    }
+
+    /* Ensure the table body can scroll */
+    .table-body {
+        position: relative;
+        height: 100%;
+        overflow: visible;
+    }
+
+    /* Make sure virtualized rows don't interfere with scrolling */
+    .table-row {
+        width: 1200px; /* Match table width */
     }
 
     .table-header-cell {

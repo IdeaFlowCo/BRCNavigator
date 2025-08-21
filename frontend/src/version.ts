@@ -1,16 +1,16 @@
 // Auto-generated version info
 export const VERSION_INFO = {
     buildTime: new Date().toISOString(),
-    mobileFix: 'v7',
+    mobileFix: 'v8',
     breakpoint: 768,
-    description: 'Mobile-first table with sticky actions column and min-width',
-    lastCommit: '0793a71', // Update this with each significant change
+    description: 'Force 1200px table width for guaranteed horizontal scrolling',
+    lastCommit: '1f690d7', // Update this with each significant change
     features: [
-        'Mobile-first table approach with 800px min-width',
-        'Sticky actions column on mobile',
-        'Simplified mobile detection (viewport only)',
-        '100px min column width for readability',
-        'Smooth iOS scrolling with -webkit-overflow-scrolling',
-        'Horizontal table scrolling with readable columns'
+        'Table forced to 1200px width on mobile',
+        'Custom scrollbar styling for better visibility',
+        'Explicit overflow-x and overflow-y auto',
+        'Position relative with z-index for scroll priority',
+        'Row width matches table width (1200px)',
+        'Horizontal scrolling guaranteed to work'
     ]
 };
