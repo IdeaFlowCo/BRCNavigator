@@ -9,50 +9,82 @@
     box-sizing: border-box;
 }
 
-/* Mobile adjustments - only apply to smaller screens that are likely mobile */
+/* Mobile-first table approach - let it be wide and scrollable */
+.table-container {
+    width: 100%;
+    height: 60vh; /* Good height for mobile */
+    overflow: auto; /* Enable both horizontal and vertical scrolling */
+    -webkit-overflow-scrolling: touch; /* Smooth iOS scrolling */
+    border: 1px solid #dee2e6;
+    border-radius: 6px;
+    background-color: #ffffff;
+    box-sizing: border-box;
+}
+
+/* Mobile-specific optimizations */
 @media (max-width: 768px) {
     .table-container {
-        height: 50vh; /* Reduce height on smaller screens for better UX */
-        overflow-x: auto; /* Enable horizontal scrolling if needed */
-        -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
+        height: 50vh; /* Slightly less height on very small screens */
+        -webkit-overflow-scrolling: touch; /* Ensure smooth scrolling on iOS */
     }
 
     .data-table {
-        table-layout: auto; /* Allow content to determine column widths on small screens */
-        min-width: 100%;
-        font-size: 14px; /* Slightly larger font for readability */
+        font-size: 14px; /* Slightly larger font for mobile readability */
+        min-width: 800px; /* Ensure table is wide enough to be readable */
     }
 
     .table-header-cell {
-        padding: 8px 8px; /* Slightly smaller padding on mobile */
-        font-size: 14px; /* Readable font size */
-        min-width: 80px; /* Minimum width for readability */
+        padding: 10px 8px; /* Comfortable padding */
+        font-size: 14px; /* Readable header size */
+        font-weight: 600;
+        min-width: 100px; /* Much wider minimum width for readability */
+        white-space: nowrap; /* Prevent header text wrapping */
     }
 
     .table-cell {
-        padding: 8px 8px; /* Comfortable padding */
-        font-size: 14px; /* Readable font size */
-        min-width: 80px; /* Minimum width for readability */
+        padding: 10px 8px; /* Comfortable padding */
+        font-size: 14px; /* Readable cell size */
+        min-width: 100px; /* Much wider minimum width for readability */
+        white-space: nowrap; /* Prevent cell text wrapping */
         overflow: hidden;
         text-overflow: ellipsis;
     }
 
-    /* Make the actions column appropriately sized */
+    /* Actions column needs to be visible and usable */
     .sticky-col {
-        width: 50px;
-        min-width: 50px;
-        max-width: 50px;
+        width: 60px;
+        min-width: 60px;
+        max-width: 60px;
+        position: sticky;
+        left: 0;
+        background-color: #f8f9fa; /* Match header background */
+        z-index: 10;
     }
 
     .favorite-icon-wrapper {
-        padding: 8px; /* Comfortable padding */
+        padding: 8px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
     }
 }
 
+/* Desktop keeps the original behavior */
+@media (min-width: 769px) {
+    .table-container {
+        height: 65vh; /* Original desktop height */
+    }
+
+    .data-table {
+        table-layout: fixed; /* Use fixed layout on desktop */
+        width: 100%;
+    }
+}
+
+/* Base table styles - mobile-first approach */
 .data-table {
     width: 100%;
     border-collapse: collapse;
-    table-layout: fixed; /* Restore fixed layout for virtualization */
 }
 
 .table-header {

@@ -35,43 +35,19 @@ const DataTable: React.FC = () => {
     const [sorting, setSorting] = useState<SortingState>([]);
     const [columnSizing, setColumnSizing] = useState<ColumnSizingState>({});
 
-    // Helper function to detect mobile devices more reliably
+        // Simple mobile detection - just check viewport width
     const isMobileDevice = (): boolean => {
         if (typeof window === 'undefined') return false;
-
-        // Check viewport width - aligned with CSS breakpoint
-        const viewportWidth = window.innerWidth;
-        if (viewportWidth <= 768) return true;
-
-        // Check user agent as fallback for mobile browsers that might not report correct viewport
-        const userAgent = navigator.userAgent.toLowerCase();
-        const mobileKeywords = ['mobile', 'android', 'iphone', 'ipad', 'ipod', 'blackberry', 'windows phone'];
-        const isMobileUA = mobileKeywords.some(keyword => userAgent.includes(keyword));
-
-        return isMobileUA && viewportWidth <= 1024;
+        return window.innerWidth <= 768;
     };
 
-    // Function to estimate initial size based on header length
-    const calculateInitialSize = useCallback((headerText: string, totalColumns: number = 10): number => {
-        // Get viewport width to make calculations responsive
-        const viewportWidth = typeof window !== 'undefined' ? window.innerWidth : 1024;
-        const isMobile = isMobileDevice(); // Use more reliable detection
+        // Simple column sizing - use CSS for mobile, dynamic sizing for desktop
+    const calculateInitialSize = useCallback((headerText: string, _totalColumns: number = 10): number => {
+        const isMobile = isMobileDevice();
 
         if (isMobile) {
-            // On mobile, distribute viewport width among columns
-            const actionsColumnWidth = 40; // Fixed width for actions column
-            const availableWidth = viewportWidth - actionsColumnWidth - 20; // Minus actions and some padding
-            const baseColumnWidth = Math.floor(availableWidth / totalColumns);
-
-            // Give Description column more space, but not too much
-            if (headerText === "Description") {
-                return Math.min(baseColumnWidth * 2, 150);
-            }
-
-            // For other columns, use base width with slight adjustments
-            const minWidth = 40;
-            const maxWidth = 100;
-            return Math.max(minWidth, Math.min(maxWidth, baseColumnWidth));
+            // On mobile, use minimum readable width - CSS will handle the rest
+            return headerText === "Description" ? 120 : 100;
         } else {
             // Desktop calculation (original logic)
             const baseSize = 120;
@@ -93,8 +69,8 @@ const DataTable: React.FC = () => {
     const actionsColumn: ColumnDef<string[]> = useMemo(
         () => {
             const isMobile = isMobileDevice(); // Use reliable mobile detection
-            const columnSize = isMobile ? 40 : 60;
-            
+            const columnSize = isMobile ? 60 : 60; // Same size, CSS will handle mobile positioning
+
             return {
             id: "actions",
             header: () => <Heart size={isMobile ? 20 : 24} />, // Smaller icon on mobile
@@ -160,14 +136,14 @@ const DataTable: React.FC = () => {
 
     const dataColumns = useMemo<ColumnDef<string[]>[]>(() => {
         const isMobile = isMobileDevice(); // Use reliable mobile detection
-        
+
         return headers.map((header, index) => ({
             id: String(index), // Keep original index as ID for data columns
             header: header,
             accessorFn: (row) => row[index], // Accessor remains the same
             size: calculateInitialSize(header, headers.length),
-            minSize: isMobile ? 30 : 50,
-            maxSize: isMobile ? 100 : 500,
+            minSize: isMobile ? 100 : 50, // Use 100px min width on mobile for readability
+            maxSize: isMobile ? 200 : 500, // Reasonable max width on mobile
             // enableResizing: true // Default is true, no need to explicitly set unless overriding
         }));
         // Filter out the UID column if it exists and we don't want to display it
