@@ -63,18 +63,54 @@
         width: 1200px; /* Explicit width to force horizontal scrolling */
     }
 
-    /* Ensure the table body can scroll and sticky header works */
-    .table-body {
+    /* Critical: Fix sticky positioning for virtualized table */
+    .table-container {
+        /* Ensure sticky context works with virtualization */
         position: relative;
-        height: 100%;
-        overflow: visible;
-        /* Ensure sticky header has space to stick to */
-        min-height: calc(100% + 60px); /* Account for header height */
+        contain: strict; /* Improve performance */
     }
 
-    /* Ensure table has proper structure for sticky to work */
     .data-table {
         position: relative;
+        /* Ensure proper stacking context for sticky elements */
+        z-index: 1;
+    }
+
+    .table-header {
+        position: sticky !important;
+        top: 0 !important;
+        z-index: 1000 !important;
+        background: #f8f9fa !important;
+        /* Ensure header background covers the sticky area */
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+
+    .table-body {
+        position: relative;
+        /* Remove height constraint that interferes with virtualization */
+        height: auto !important;
+        min-height: 100%;
+    }
+
+    /* Ensure virtualized rows don't interfere with sticky header */
+    .table-row {
+        position: absolute;
+        /* Ensure proper z-index stacking */
+        z-index: 1;
+    }
+
+    /* Make sticky column work with virtualization */
+    .sticky-col {
+        position: sticky !important;
+        left: 0 !important;
+        z-index: 1001 !important;
+        background: #f8f9fa !important;
+    }
+
+    /* Ensure header cells in sticky column have proper background */
+    .table-header .sticky-col {
+        background: #f8f9fa !important;
+        z-index: 1002 !important;
     }
 
     /* Make sure virtualized rows don't interfere with scrolling */
