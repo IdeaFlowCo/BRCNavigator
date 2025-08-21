@@ -1,16 +1,16 @@
 // Auto-generated version info
 export const VERSION_INFO = {
     buildTime: new Date().toISOString(),
-    mobileFix: 'v9',
+    mobileFix: 'v10',
     breakpoint: 768,
-    description: 'Fixed sticky header with webkit prefix for iOS',
-    lastCommit: '1fbe70b', // Update this with each significant change
+    description: 'Mobile-specific sticky header fixes with proper z-index',
+    lastCommit: '9b311bc', // Update this with each significant change
     features: [
-        'Sticky header with -webkit-sticky for iOS support',
-        'Higher z-index (100) for header to stay on top',
-        'will-change: transform for better performance',
-        'Table forced to 1200px width on mobile',
-        'Both vertical (sticky header) and horizontal scrolling work',
-        'Sticky actions column also has webkit prefix'
+        'Mobile media query for sticky header',
+        'Min-height for table body to ensure sticky works',
+        'Z-index 101 for sticky column header (above regular header)',
+        'Position relative on data-table for sticky context',
+        'Webkit prefix preserved for iOS',
+        'Table structure optimized for sticky positioning'
     ]
 };

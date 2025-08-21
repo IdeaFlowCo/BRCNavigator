@@ -63,11 +63,18 @@
         width: 1200px; /* Explicit width to force horizontal scrolling */
     }
 
-    /* Ensure the table body can scroll */
+    /* Ensure the table body can scroll and sticky header works */
     .table-body {
         position: relative;
         height: 100%;
         overflow: visible;
+        /* Ensure sticky header has space to stick to */
+        min-height: calc(100% + 60px); /* Account for header height */
+    }
+
+    /* Ensure table has proper structure for sticky to work */
+    .data-table {
+        position: relative;
     }
 
     /* Make sure virtualized rows don't interfere with scrolling */
@@ -108,6 +115,24 @@
         display: flex;
         justify-content: center;
         align-items: center;
+    }
+
+    /* Ensure header is sticky on mobile */
+    .table-header {
+        position: -webkit-sticky; /* Safari/iOS support */
+        position: sticky;
+        top: 0;
+        background: #f8f9fa; /* Header background */
+        z-index: 100; /* Higher z-index to ensure it stays on top */
+        border-bottom: 2px solid #dee2e6; /* Header bottom border */
+        /* Ensure the header stays visible */
+        will-change: transform;
+    }
+
+    /* Ensure sticky column background matches header */
+    .table-header .sticky-col {
+        background-color: #f8f9fa; /* Match header background */
+        z-index: 101; /* Above header */
     }
 }
 
