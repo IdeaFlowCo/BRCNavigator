@@ -12,22 +12,6 @@ import { VERSION_INFO } from "@/version"; // Import version info
 
 // Define the main layout and logic component
 function AppLayout() {
-    // Log version info on mount for debugging
-    useEffect(() => {
-        console.log(`%c🔥 BRC Navigator Version Info`, 'color: #ff6600; font-size: 16px; font-weight: bold');
-        console.log(`Build: ${VERSION_INFO.buildTime}`);
-        console.log(`Mobile Fix: ${VERSION_INFO.mobileFix} - Breakpoint @ ${VERSION_INFO.breakpoint}px`);
-        console.log(`Description: ${VERSION_INFO.description}`);
-        console.log(`Last Commit: ${VERSION_INFO.lastCommit}`);
-        console.log('Features:', VERSION_INFO.features);
-        console.log('---');
-        
-        // Also log viewport info for debugging
-        if (typeof window !== 'undefined') {
-            console.log(`Current Viewport: ${window.innerWidth}x${window.innerHeight}`);
-            console.log(`User Agent: ${navigator.userAgent.substring(0, 50)}...`);
-        }
-    }, []);
     
     const {
         headers,
@@ -324,15 +308,6 @@ function AppLayout() {
                         gatherings across the playa that match your interests
                         and expand your consciousness.
                     </p>
-                    {/* Version debug info for mobile */}
-                    <div style={{ 
-                        fontSize: '11px', 
-                        color: '#999', 
-                        marginTop: '8px',
-                        fontFamily: 'monospace'
-                    }}>
-                        v{VERSION_INFO.mobileFix} • {VERSION_INFO.lastCommit} • {typeof window !== 'undefined' ? `${window.innerWidth}×${window.innerHeight}` : 'loading...'}
-                    </div>
                 </div>
 
                 <ErrorBoundary>
@@ -431,7 +406,7 @@ function AppLayout() {
                             View on GitHub
                         </a>
                     </p>
-                    <p>MIT License</p>
+                    <p>MIT License • v{VERSION_INFO.mobileFix}</p>
                 </div>
             </footer>
 
