@@ -23,6 +23,14 @@
     table-layout: fixed; /* Restore fixed layout for virtualization */
 }
 
+/* Mobile-specific table fix */
+@media screen and (max-width: 768px) {
+    .data-table {
+        table-layout: auto; /* Allow table to be more flexible on mobile */
+        min-width: 100%; /* Ensure minimum width */
+    }
+}
+
 .table-header {
     position: sticky;
     top: 0;
