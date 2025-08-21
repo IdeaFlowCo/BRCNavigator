@@ -18,6 +18,9 @@ import {
     Heart, // Import Heart icon
 } from "lucide-react";
 import { useData } from "../context/DataContext";
+import useMediaQuery from "../hooks/useMediaQuery";
+import CardList from "./CardList";
+import { generateRowId } from "../utils/rowIdGenerator";
 import "./DataTable.css";
 // import { Button } from "./ui/button"; // Remove Button import
 
@@ -34,6 +37,9 @@ const DataTable: React.FC = () => {
     const tableContainerRef = useRef<HTMLDivElement>(null);
     const [sorting, setSorting] = useState<SortingState>([]);
     const [columnSizing, setColumnSizing] = useState<ColumnSizingState>({});
+    
+    // Use the media query hook for responsive view switching
+    const isMobile = useMediaQuery("(max-width: 768px)");
 
         // Simple mobile detection - just check viewport width
     const isMobileDevice = (): boolean => {
@@ -42,7 +48,7 @@ const DataTable: React.FC = () => {
     };
 
         // Simple column sizing - use CSS for mobile, dynamic sizing for desktop
-    const calculateInitialSize = useCallback((headerText: string, _totalColumns: number = 10): number => {
+    const calculateInitialSize = useCallback((headerText: string): number => {
         const isMobile = isMobileDevice();
 
         if (isMobile) {
@@ -79,15 +85,8 @@ const DataTable: React.FC = () => {
             maxSize: columnSize,
             enableResizing: false,
             cell: ({ row }: CellContext<string[], unknown>) => {
-                // Ensure uidColumnIndex is valid before proceeding
-                if (
-                    uidColumnIndex < 0 ||
-                    uidColumnIndex >= row.original.length
-                ) {
-                    console.error("Invalid UID column index:", uidColumnIndex);
-                    return null; // Or render an error indicator
-                }
-                const uid = row.original[uidColumnIndex];
+                // Use generateRowId for consistent ID generation
+                const uid = generateRowId(row.original, row.index, uidColumnIndex);
                 const isFavorited = favoriteIds.has(uid);
 
                 // Correct event type for div onClick
@@ -141,7 +140,7 @@ const DataTable: React.FC = () => {
             id: String(index), // Keep original index as ID for data columns
             header: header,
             accessorFn: (row) => row[index], // Accessor remains the same
-            size: calculateInitialSize(header, headers.length),
+            size: calculateInitialSize(header),
             minSize: isMobile ? 100 : 50, // Use 100px min width on mobile for readability
             maxSize: isMobile ? 200 : 500, // Reasonable max width on mobile
             // enableResizing: true // Default is true, no need to explicitly set unless overriding
@@ -212,6 +211,12 @@ const DataTable: React.FC = () => {
         );
     }
 
+    // Return CardList for mobile view
+    if (isMobile) {
+        return <CardList />;
+    }
+
+    // Return table view for desktop
     return (
         <div ref={tableContainerRef} className="table-container">
             {/* Sticky header for mobile - positioned outside virtualized area */}
