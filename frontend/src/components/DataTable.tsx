@@ -36,42 +36,56 @@ const DataTable: React.FC = () => {
     const [columnSizing, setColumnSizing] = useState<ColumnSizingState>({});
 
     // Function to estimate initial size based on header length
-    const calculateInitialSize = (headerText: string): number => {
+    const calculateInitialSize = (headerText: string, totalColumns: number = 10): number => {
         // Get viewport width to make calculations responsive
         const viewportWidth = typeof window !== 'undefined' ? window.innerWidth : 1024;
         const isMobile = viewportWidth < 768;
         
-        // Adjust base sizes for mobile
-        const baseSize = isMobile ? 80 : 120; // Smaller base on mobile
-        const charWidth = isMobile ? 6 : 8; // Smaller character width on mobile
-        const padding = isMobile ? 20 : 40; // Less padding on mobile
-        
-        const estimatedWidth = headerText.length * charWidth + padding;
-        // Use a larger base size if the estimated width is significant
-        const dynamicBase = Math.max(baseSize, estimatedWidth * 0.6); // Bias towards wider if header is long
-        let calculatedSize = Math.max(
-            isMobile ? 40 : 50, // Smaller minimum on mobile
-            Math.max(dynamicBase, estimatedWidth * 0.8)
-        );
-
-        // Special case for 'Description' column
-        if (headerText === "Description") {
-            calculatedSize *= isMobile ? 2 : 3; // Less expansion on mobile
+        if (isMobile) {
+            // On mobile, distribute viewport width among columns
+            const actionsColumnWidth = 40; // Fixed width for actions column
+            const availableWidth = viewportWidth - actionsColumnWidth - 20; // Minus actions and some padding
+            const baseColumnWidth = Math.floor(availableWidth / totalColumns);
+            
+            // Give Description column more space, but not too much
+            if (headerText === "Description") {
+                return Math.min(baseColumnWidth * 2, 150);
+            }
+            
+            // For other columns, use base width with slight adjustments
+            const minWidth = 40;
+            const maxWidth = 100;
+            return Math.max(minWidth, Math.min(maxWidth, baseColumnWidth));
+        } else {
+            // Desktop calculation (original logic)
+            const baseSize = 120;
+            const charWidth = 8;
+            const padding = 40;
+            const estimatedWidth = headerText.length * charWidth + padding;
+            const dynamicBase = Math.max(baseSize, estimatedWidth * 0.6);
+            let calculatedSize = Math.max(50, Math.max(dynamicBase, estimatedWidth * 0.8));
+            
+            if (headerText === "Description") {
+                calculatedSize *= 3;
+            }
+            
+            return Math.min(500, calculatedSize);
         }
-
-        // Clamp between min/max - smaller max on mobile
-        const maxWidth = isMobile ? 200 : 500;
-        return Math.min(maxWidth, calculatedSize);
     };
 
     // Define the Actions column separately
     const actionsColumn: ColumnDef<string[]> = useMemo(
-        () => ({
+        () => {
+            const viewportWidth = typeof window !== 'undefined' ? window.innerWidth : 1024;
+            const isMobile = viewportWidth < 768;
+            const columnSize = isMobile ? 40 : 60;
+            
+            return {
             id: "actions",
-            header: () => <Heart size={24} />, // Increased header icon size
-            size: 60, // Keep column size for now, might need adjustment
-            minSize: 60,
-            maxSize: 60,
+            header: () => <Heart size={isMobile ? 20 : 24} />, // Smaller icon on mobile
+            size: columnSize,
+            minSize: columnSize,
+            maxSize: columnSize,
             enableResizing: false,
             cell: ({ row }: CellContext<string[], unknown>) => {
                 // Ensure uidColumnIndex is valid before proceeding
@@ -120,23 +134,26 @@ const DataTable: React.FC = () => {
                             }
                         }}
                     >
-                        <Heart size={24} className="favorite-icon" />
-                        {/* Increased icon size */}
+                        <Heart size={isMobile ? 20 : 24} className="favorite-icon" />
+                        {/* Smaller icon on mobile */}
                     </div>
                 );
             },
-        }),
+        }},
         [favoriteIds, addFavorite, removeFavorite, uidColumnIndex]
     );
 
     const dataColumns = useMemo<ColumnDef<string[]>[]>(() => {
+        const viewportWidth = typeof window !== 'undefined' ? window.innerWidth : 1024;
+        const isMobile = viewportWidth < 768;
+        
         return headers.map((header, index) => ({
             id: String(index), // Keep original index as ID for data columns
             header: header,
             accessorFn: (row) => row[index], // Accessor remains the same
-            size: calculateInitialSize(header),
-            minSize: 50,
-            maxSize: 500,
+            size: calculateInitialSize(header, headers.length),
+            minSize: isMobile ? 30 : 50,
+            maxSize: isMobile ? 100 : 500,
             // enableResizing: true // Default is true, no need to explicitly set unless overriding
         }));
         // Filter out the UID column if it exists and we don't want to display it
