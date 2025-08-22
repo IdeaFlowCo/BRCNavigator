@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">BRC Navigator</string>
+    <string name="title_activity_main">BRC Navigator</string>
+    <string name="package_name">app.ideaflow.brcnavigator</string>
+    <string name="custom_url_scheme">app.ideaflow.brcnavigator</string>
+</resources>

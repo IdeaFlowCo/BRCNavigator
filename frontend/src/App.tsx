@@ -9,6 +9,7 @@ import ResourcesSection from "@/components/ResourcesSection"; // Import the new 
 import ErrorBoundary from "@/components/ErrorBoundary";
 import { HelpCircle, Heart } from "lucide-react"; // Import the HelpCircle & Heart icons
 import { VERSION_INFO } from "@/version"; // Import version info
+import { Capacitor } from '@capacitor/core'; // Import Capacitor to detect platform
 
 // Define the main layout and logic component
 function AppLayout() {
@@ -73,8 +74,58 @@ function AppLayout() {
         }
     };
 
-    // --- Function to fetch data from URL ---
+    // --- Function to fetch data from URL or local file ---
     const fetchAndSetDataFromUrl = async (url: string, isPrecache = false) => {
+        const isNativeApp = Capacitor.isNativePlatform();
+        
+        // If we're in the native app, use the bundled xlsx file
+        if (isNativeApp) {
+            setIsLoadingSpreadsheet(true);
+            let parsedResult: { headers: string[]; rows: string[][] } | null = null;
+            try {
+                // Fetch the local bundled xlsx file
+                const res = await fetch('/brc-resources.xlsx');
+                if (!res.ok) throw new Error(`Failed to fetch local data: ${res.statusText}`);
+                
+                // Process as xlsx file
+                const ExcelJS = await import("exceljs");
+                const fileData = await res.arrayBuffer();
+                const workbook = new ExcelJS.Workbook();
+                await workbook.xlsx.load(fileData);
+                const worksheet = workbook.worksheets[0];
+                
+                // Convert worksheet to 2D array
+                const json: string[][] = [];
+                worksheet.eachRow((row) => {
+                    const rowData: string[] = [];
+                    row.eachCell((cell, colNumber) => {
+                        rowData[colNumber - 1] = cell.value?.toString() || "";
+                    });
+                    json.push(rowData);
+                });
+                
+                parsedResult = parseData(json);
+                if (parsedResult) {
+                    setData(parsedResult.headers, parsedResult.rows);
+                } else {
+                    setData([], []); // Clear data if parsing failed
+                }
+            } catch (error) {
+                console.error("Error loading bundled data:", error);
+                if (!isPrecache) {
+                    alert(`Failed to load bundled data. Error: ${
+                        error instanceof Error ? error.message : String(error)
+                    }`);
+                }
+                setData([], []); // Clear data on error
+                parsedResult = null;
+            } finally {
+                setIsLoadingSpreadsheet(false);
+            }
+            return parsedResult;
+        }
+        
+        // Original web version - fetch from Google Sheets
         if (
             !url ||
             !url.startsWith("https://docs.google.com/spreadsheets/d/")
